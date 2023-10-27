@@ -1,75 +1,72 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-const path = require('path');
-const { InjectManifest } = require('workbox-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const WebpackPwaManifest = require("webpack-pwa-manifest");
+const path = require("path");
+const { InjectManifest } = require("workbox-webpack-plugin");
 
 // TODO: Add and configure workbox plugins for a service worker and manifest file.
 
 module.exports = () => {
   return {
-    mode: 'development',
+    mode: "development",
     entry: {
-      main: './src/js/index.js',
-      install: './src/js/install.js',
-      database: './src/js/database.js',
-      editor: './src/js/editor.js',
-      header: './src/js/header.js',
+      main: "./src/js/index.js",
+      install: "./src/js/install.js",
+      database: "./src/js/database.js",
+      editor: "./src/js/editor.js",
+      header: "./src/js/header.js",
     },
     output: {
-      filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
+      filename: "[name].bundle.js",
+      path: path.resolve(__dirname, "dist"),
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './index.html',
-        title: 'JATE'
-      }),
-      
-      new InjectManifest({
-        swSrc: './src-sw.js', // source of the script for the service worker in our client folder
-        swDest: 'src-sw.js' // where the service worker script will be saved in the dist folder
+        template: "./index.html",
+        title: "JATE",
       }),
       new WebpackPwaManifest({
-        name: 'Just Another Text Editor',
-        short_name: 'JATE',
-        description: 'Just another text editor',
+        name: "Just Another Text Editor",
+        short_name: "JATE",
+        description: "Just another text editor",
         fingerprints: false,
-        inject: true,
-        background_color: '#225ca3',
-        start_url: '/',
-        publicPath: '/',
+        background_color: "#225ca3",
+        start_url: "/",
+        publicPath: "/",
         icons: [
           {
-            src: path.resolve('src/images/logo.png'),
+            src: path.resolve("src/images/logo.png"),
             sizes: [96, 128, 192, 256, 384, 512],
-            destination: path.join('assets', 'icons'),
+            destination: path.join("assets", "icons"),
           },
         ],
-        
       }),
-      
-      
+      new InjectManifest({
+        swSrc: "./src-sw.js", // source of the script for the service worker in our client folder
+        swDest: "src-sw.js", // where the service worker script will be saved in the dist folder
+      }),
     ],
     // TODO: Add CSS loaders and babel to webpack.
-    
+
     module: {
       rules: [
         {
-          test:/\.css$/i,
-          use: ['style-loader', 'css-loader'],
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
         },
         {
           test: /\.m?js$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: ['@babel/preset-env'],
-              plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime'],
+              presets: ["@babel/preset-env"],
+              plugins: [
+                "@babel/plugin-proposal-object-rest-spread",
+                "@babel/transform-runtime",
+              ],
             },
           },
         },
-        
       ],
     },
   };
